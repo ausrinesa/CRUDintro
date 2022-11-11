@@ -100,12 +100,43 @@ class Item
     {
         $items = [];
         $db = new DB();
-        $query = "SELECT * FROM `items` WHERE `category`=\"" . $_GET['filter'] . "\"";
+        $query = "SELECT * FROM `items` ";
+        $first = true;
+        if ($_GET['filter'] != "") {
+            $query .= "WHERE `category`=\"" . $_GET['filter'] . "\"";
+            $first = false;
+        }
 
-        // $query = "SELECT * FROM `items` WHERE `category`= 'Sofos' ";
+        if ($_GET['priceFrom'] != "") {
+            $query .= (($first) ? "WHERE" : "AND") . " `price` >= " . $_GET['priceFrom'] . " ";
+            $first = false;
+        }
 
-        echo $query;
-        // print_r($_GET);
+        if ($_GET['priceTo'] != "") {
+            $query .= (($first) ? "WHERE" : "AND") . " `price` <= " . $_GET['priceTo'] . " ";
+            $first = false;
+        }
+
+        switch($_GET['sort']) {
+            case '1';
+                 $query.="ORDER by 'price'";
+                 break; 
+    
+            case '2';
+                 $query.="ORDER by 'price' DESC";
+                 break; 
+
+             case '3';
+                 $query.="ORDER by 'name'";
+                 break; 
+
+             case '4';
+                 $query.="ORDER by 'name' DESC";
+                break; 
+  }
+
+
+        // echo $query;
         // die;
         $result = $db->conn->query($query);
 
@@ -115,7 +146,6 @@ class Item
         $db->conn->close();
         return $items;
     }
-
 
 }
 
