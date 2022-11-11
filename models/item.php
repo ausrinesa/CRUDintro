@@ -81,17 +81,42 @@ class Item
         $db->conn->close();
     }
 
-    public static function filter($category)
+
+    public static function getCategory()
     {
-        $item = new Item();
+        $categories = [];
         $db = new DB();
-        $query = "SELECT * FROM `items` where `category`=" . $category;
+        $query = "SELECT DISTINCT `category` FROM `items` ";
         $result = $db->conn->query($query);
+
         while ($row = $result->fetch_assoc()) {
-            $item = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+            $categories[] = $row['category'];
         }
         $db->conn->close();
-        return $item;
+        return $categories;
     }
+
+    public static function filter()
+    {
+        $items = [];
+        $db = new DB();
+        $query = "SELECT * FROM `items` WHERE `category`=\"" . $_GET['filter'] . "\"";
+
+        // $query = "SELECT * FROM `items` WHERE `category`= 'Sofos' ";
+
+        echo $query;
+        // print_r($_GET);
+        // die;
+        $result = $db->conn->query($query);
+
+        while ($row = $result->fetch_assoc()) {
+            $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+        }
+        $db->conn->close();
+        return $items;
+    }
+
+
 }
+
 ?>
