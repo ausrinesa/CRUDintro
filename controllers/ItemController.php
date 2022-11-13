@@ -48,6 +48,11 @@ class ItemContoller
 
     }
 
+    public static function search()
+    {
+        return Item::search();
+    }
+
 }
 
 ?>

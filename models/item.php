@@ -147,6 +147,20 @@ class Item
         return $items;
     }
 
+    public static function search(){
+        $items = [];
+        $db = new DB();
+        $query = "SELECT * FROM `items` where `name` like \"%" . $_GET['search'] . "%\""; 
+        $result = $db->conn->query($query);
+    
+        while($row = $result->fetch_assoc()){
+            $items[] = new Item( $row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+        }
+        $db->conn->close();
+        return $items;
+
+}
+
 }
 
 ?>

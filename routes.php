@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if (isset($_POST['edit'])) {
         $item = ItemContoller::show();
+        $items = ItemContoller::index();
         $edit = true;
     }
 
@@ -34,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['filter'])) {
         $items = ItemContoller::filter();
         // print_r($_GET);
+    } else if (isset($_GET['search'])) {
+        $items = ItemContoller::search();
     } else {
         $items = ItemContoller::index();
     }
