@@ -3,8 +3,9 @@
         <form class="row g-3" method="GET">
             <div class="col-auto">
 
-                <select class="form-select form-control" name="filter" aria-label="Default select example"
+                <select class="form-select form-control filter" name="filter" aria-label="Default select example"
                     id="category">
+                    <option value="" selected> category </option>
                     <?php foreach ($categories as $key => $category) { ?>
                     <option>
                         <?= $category ?>
@@ -15,16 +16,16 @@
             </div>
             <div class="col-2">
 
-                <input type="text" class="form-control" placeholder="price: from" name="priceFrom">
+                <input type="text" class="form-control filter" placeholder="price: from" name="priceFrom">
             </div>
             <div class="col-2">
-                <input type="text" class="form-control" placeholder="price: to" name="priceTo">
+                <input type="text" class="form-control filter" placeholder="price: to" name="priceTo">
 
             </div>
 
             <div class="col-auto">
 
-                <select class="form-select form-control" aria-label="Default select example" name="sort">
+                <select class="form-select form-control filter" aria-label="Default select example" name="sort">
                     <option selected value="0"> Sort </option>
                     <option value="1"> price: low to high </option>
                     <option value="2"> price: high to low </option>
@@ -34,7 +35,7 @@
 
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary mb-3">filter</button>
+                <button type="submit" class="btn btn-primary mb-3" id="filterBtn">Filter</button>
             </div>
     </div>
 </div>
