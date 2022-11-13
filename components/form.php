@@ -2,7 +2,9 @@
     <form method="post">
         <div class="mb-3">
             <label for="form" class="form-label">Item name</label>
-            <input type="text" name='name' class="form-control" id="form" value=<?=($edit) ? $item->name : " " ?> >
+            <input type="text" name='name' class="form-control" id="form" style="text-transform:uppercase"
+                value=<?=($edit) ? $item->name : " " ?>
+            >
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
