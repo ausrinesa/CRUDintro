@@ -117,23 +117,23 @@ class Item
             $first = false;
         }
 
-        switch($_GET['sort']) {
-            case '1';
-                 $query.="ORDER by 'price'";
-                 break; 
-    
-            case '2';
-                 $query.="ORDER by 'price' DESC";
-                 break; 
+        switch ($_GET['sort']) {
+            case '1':
+                $query .= "ORDER BY `price`";
+                break;
 
-             case '3';
-                 $query.="ORDER by 'name'";
-                 break; 
+            case '2':
+                $query .= "ORDER BY `price` DESC";
+                break;
 
-             case '4';
-                 $query.="ORDER by 'name' DESC";
-                break; 
-  }
+            case '3':
+                $query .= "ORDER BY `name`";
+                break;
+
+            case '4':
+                $query .= "ORDER BY `name` DESC";
+                break;
+        }
 
 
         // echo $query;
@@ -147,19 +147,20 @@ class Item
         return $items;
     }
 
-    public static function search(){
+    public static function search()
+    {
         $items = [];
         $db = new DB();
-        $query = "SELECT * FROM `items` where `name` like \"%" . $_GET['search'] . "%\""; 
+        $query = "SELECT * FROM `items` where `name` like \"%" . $_GET['search'] . "%\"";
         $result = $db->conn->query($query);
-    
-        while($row = $result->fetch_assoc()){
-            $items[] = new Item( $row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+
+        while ($row = $result->fetch_assoc()) {
+            $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
         }
         $db->conn->close();
         return $items;
 
-}
+    }
 
 }
 
