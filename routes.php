@@ -1,5 +1,7 @@
 <?php
-include "./controllers/ItemController.php"; ?>
+include "./controllers/ItemController.php";
+include "./controllers/CategoryController.php";
+?>
 
 <?php
 
@@ -28,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
+    $categories = CategoryContoller::index();
+
 }
 
 
@@ -37,13 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         // print_r($_GET);
     } else if (isset($_GET['search'])) {
         $items = ItemContoller::search();
+    } else if (isset($_GET['showCat'])) {
+        $items = CategoryContoller::all();
     } else {
         $items = ItemContoller::index();
     }
 
 }
 
-$categories = ItemContoller::getCategory();
+// $categories = CategoryContoller::index();
 
 
 ?>

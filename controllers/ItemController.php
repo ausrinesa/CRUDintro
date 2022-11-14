@@ -26,7 +26,6 @@ class ItemContoller
         $item = new Item();
         $item->id = $_POST['id'];
         $item->name = $_POST['name'];
-        $item->category = $_POST['category'];
         $item->price = $_POST['price'];
         $item->about = $_POST['about'];
         $item->update();
@@ -37,10 +36,10 @@ class ItemContoller
         Item::destroy($_POST['id']);
     }
 
-    public static function getCategory()
-    {
-        return Item::getCategory();
-    }
+    // public static function getCategory()
+    // {
+    //     return Item::getCategory();
+    // }
 
     public static function filter()
     {

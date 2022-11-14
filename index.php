@@ -4,6 +4,7 @@ include "./routes.php";
 ?>
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +34,7 @@ include "./routes.php";
             </h1>
         </div>
         <div class="col-6">
-            <form action="" method="get">
+            <form action="" method="get" id="searchBar">
                 <div class="row">
                     <div class="col-8">
                         <input type="text" class="form-control" name="search" placeholder="Search item by name">
@@ -59,59 +60,62 @@ include "./routes.php";
     ?>
 
 
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>price</th>
+                    <th>about</th>
+                    <th>
+                        <form method="get" name="showCat"> <a href="./catshow.php"> categories </a> </form>
+                    </th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($items as $item) { ?>
+                <tr>
+                    <td>
+                        <?= $item->id ?>
+                    </td>
+                    <td>
+                        <?= $item->name ?>
+                    </td>
+                    <td>
+                        <?= $item->price ?>
+                    </td>
+                    <td>
+                        <?= $item->about ?>
+                    </td>
+                    <td>
+                        <?= $item->category ?>
+                    </td>
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>category</th>
-                <th>price</th>
-                <th>about</th>
-                <th>action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($items as $item) { ?>
-            <tr>
-                <td>
-                    <?= $item->id ?>
-                </td>
-                <td>
-                    <?= $item->name ?>
-                </td>
-                <td>
-                    <?= $item->category ?>
-                </td>
-                <td>
-                    <?= $item->price ?>
-                </td>
-                <td>
-                    <?= $item->about ?>
-                </td>
+                    <td>
+                        <div class="d-flex flex-row  mb-3">
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?= $item->id ?>">
+                                <button id="editBtn" class="btn btn-outline-primary" type="submit" name="edit">
+                                    edit
+                                </button>
+                            </form>
 
-                <td>
-                    <div class="d-flex flex-row  mb-3">
-                        <form action="" method="post">
-                            <input type="hidden" name="id" value="<?= $item->id ?>">
-                            <button id="editBtn" class="btn btn-outline-primary" type="submit" name="edit">
-                                edit
-                            </button>
-                        </form>
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?= $item->id ?>">
+                                <button id="deleteBtn" class="btn btn-outline-danger" type="submit" name="destroy">
+                                    delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
 
-                        <form action="" method="post">
-                            <input type="hidden" name="id" value="<?= $item->id ?>">
-                            <button id="deleteBtn" class="btn btn-outline-danger" type="submit" name="destroy">
-                                delete
-                            </button>
-                        </form>
-                    </div>
-                </td>
-
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 

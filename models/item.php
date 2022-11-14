@@ -6,17 +6,19 @@ class Item
 {
     public $id;
     public $name;
-    public $category;
     public $price;
     public $about;
+    public $category;
+    public $categoryId;
 
-    public function __construct($id = null, $name = null, $category = null, $price = null, $about = null)
+    public function __construct($id = null, $name = null, $price = null, $about = null, $category = null, $categoryId = null)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->category = $category;
         $this->price = $price;
         $this->about = $about;
+        $this->category = $category;
+        $this->categoryId = $categoryId;
 
     }
 
@@ -24,11 +26,11 @@ class Item
     {
         $items = [];
         $db = new DB();
-        $query = "SELECT * FROM `items` ";
+        $query = "SELECT `items`.`id`, `items`.`name`, `items`.`price`, `items`.`about`, `items`.`category_id`, `categories`.`category` FROM `items` JOIN `categories` on `categories`.`id`= `items`.`category_id`";
         $result = $db->conn->query($query);
 
         while ($row = $result->fetch_assoc()) {
-            $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+            $items[] = new Item($row['id'], $row['name'], $row['price'], $row['about'], $row['category'], $row['category_id']);
         }
         $db->conn->close();
         return $items;
@@ -38,7 +40,7 @@ class Item
     {
         $db = new DB();
         $stmt = $db->conn->prepare("INSERT INTO `items`( `name`, `category`, `price`, `about`) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssds", $_POST['name'], $_POST['category'], $_POST['price'], $_POST['about']);
+        $stmt->bind_param("ssds", $_POST['name'], $_POST['price'], $_POST['about']);
         $stmt->execute();
         $stmt->close();
 
@@ -53,7 +55,7 @@ class Item
         $result = $db->conn->query($query);
 
         while ($row = $result->fetch_assoc()) {
-            $item = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+            $item = new Item($row['id'], $row['name'], $row['price'], $row['about']);
         }
         $db->conn->close();
         return $item;
@@ -62,8 +64,8 @@ class Item
     public function update()
     {
         $db = new DB();
-        $stmt = $db->conn->prepare("UPDATE `items` SET `name`= ? ,`category`= ? ,`price`= ? ,`about`= ? WHERE `id` = ?");
-        $stmt->bind_param("ssdsi", $_POST['name'], $_POST['category'], $_POST['price'], $_POST['about'], $_POST['id']);
+        $stmt = $db->conn->prepare("UPDATE `items` SET `name`= ? ,`price`= ? ,`about`= ? WHERE `id` = ?");
+        $stmt->bind_param("sdsi", $_POST['name'], $_POST['price'], $_POST['about'], $_POST['id']);
         $stmt->execute();
 
         $stmt->close();
@@ -82,70 +84,70 @@ class Item
     }
 
 
-    public static function getCategory()
-    {
-        $categories = [];
-        $db = new DB();
-        $query = "SELECT DISTINCT `category` FROM `items` ";
-        $result = $db->conn->query($query);
+    // public static function getCategory()
+    // {
+    //     $categories = [];
+    //     $db = new DB();
+    //     $query = "SELECT DISTINCT `category` FROM `items` ";
+    //     $result = $db->conn->query($query);
 
-        while ($row = $result->fetch_assoc()) {
-            $categories[] = $row['category'];
-        }
-        $db->conn->close();
-        return $categories;
-    }
+    //     while ($row = $result->fetch_assoc()) {
+    //         $categories[] = $row['category'];
+    //     }
+    //     $db->conn->close();
+    //     return $categories;
+    // }
 
-    public static function filter()
-    {
-        $items = [];
-        $db = new DB();
-        $query = "SELECT * FROM `items` ";
-        $first = true;
-        if ($_GET['filter'] != "") {
-            $query .= "WHERE `category`=\"" . $_GET['filter'] . "\"";
-            $first = false;
-        }
+    // public static function filter()
+    // {
+    //     $items = [];
+    //     $db = new DB();
+    //     $query = "SELECT * FROM `items` ";
+    //     $first = true;
+    //     if ($_GET['filter'] != "") {
+    //         $query .= "WHERE `category`=\"" . $_GET['filter'] . "\"";
+    //         $first = false;
+    //     }
 
-        if ($_GET['priceFrom'] != "") {
-            $query .= (($first) ? "WHERE" : "AND") . " `price` >= " . $_GET['priceFrom'] . " ";
-            $first = false;
-        }
+    //     if ($_GET['priceFrom'] != "") {
+    //         $query .= (($first) ? "WHERE" : "AND") . " `price` >= " . $_GET['priceFrom'] . " ";
+    //         $first = false;
+    //     }
 
-        if ($_GET['priceTo'] != "") {
-            $query .= (($first) ? "WHERE" : "AND") . " `price` <= " . $_GET['priceTo'] . " ";
-            $first = false;
-        }
+    //     if ($_GET['priceTo'] != "") {
+    //         $query .= (($first) ? "WHERE" : "AND") . " `price` <= " . $_GET['priceTo'] . " ";
+    //         $first = false;
+    //     }
 
-        switch ($_GET['sort']) {
-            case '1':
-                $query .= "ORDER BY `price`";
-                break;
+    //     switch ($_GET['sort']) {
+    //         case '1':
+    //             $query .= "ORDER BY `price`";
+    //             break;
 
-            case '2':
-                $query .= "ORDER BY `price` DESC";
-                break;
+    //         case '2':
+    //             $query .= "ORDER BY `price` DESC";
+    //             break;
 
-            case '3':
-                $query .= "ORDER BY `name`";
-                break;
+    //         case '3':
+    //             $query .= "ORDER BY `name`";
+    //             break;
 
-            case '4':
-                $query .= "ORDER BY `name` DESC";
-                break;
-        }
+    //         case '4':
+    //             $query .= "ORDER BY `name` DESC";
+    //             break;
+    //     }
 
 
-        // echo $query;
-        // die;
-        $result = $db->conn->query($query);
+    //     // echo $query;
+    //     // die;
+    //     $result = $db->conn->query($query);
 
-        while ($row = $result->fetch_assoc()) {
-            $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
-        }
-        $db->conn->close();
-        return $items;
-    }
+    //     while ($row = $result->fetch_assoc()) {
+    //         $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+    //     }
+    //     $db->conn->close();
+    //     return $items;
+    // }
 
     public static function search()
     {
@@ -155,11 +157,10 @@ class Item
         $result = $db->conn->query($query);
 
         while ($row = $result->fetch_assoc()) {
-            $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
+            $items[] = new Item($row['id'], $row['name'], $row['price'], $row['about']);
         }
         $db->conn->close();
         return $items;
-
     }
 
 }
