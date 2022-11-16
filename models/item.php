@@ -39,8 +39,8 @@ class Item
     public static function create()
     {
         $db = new DB();
-        $stmt = $db->conn->prepare("INSERT INTO `items`( `name`, `category`, `price`, `about`) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssds", $_POST['name'], $_POST['price'], $_POST['about']);
+        $stmt = $db->conn->prepare("INSERT INTO `items`( `name`, `price`, `about`,`category_id`) VALUES (?,?,?,?)");
+        $stmt->bind_param("sdsi", $_POST['name'], $_POST['price'], $_POST['about'], $_POST['categoryId']);
         $stmt->execute();
         $stmt->close();
 
@@ -64,9 +64,10 @@ class Item
     public function update()
     {
         $db = new DB();
-        $stmt = $db->conn->prepare("UPDATE `items` SET `name`= ? ,`price`= ? ,`about`= ? WHERE `id` = ?");
-        $stmt->bind_param("sdsi", $_POST['name'], $_POST['price'], $_POST['about'], $_POST['id']);
+        $stmt = $db->conn->prepare("UPDATE `items` SET `name`= ? ,`price`= ? ,`about`= ? ,`category_id`= ? WHERE `id` = ?");
+        $stmt->bind_param("sdsii", $_POST['name'], $_POST['price'], $_POST['about'], $_POST['categoryId'], $_POST['id']);
         $stmt->execute();
+
 
         $stmt->close();
         $db->conn->close();
@@ -98,56 +99,55 @@ class Item
     //     return $categories;
     // }
 
-    // public static function filter()
-    // {
-    //     $items = [];
-    //     $db = new DB();
-    //     $query = "SELECT * FROM `items` ";
-    //     $first = true;
-    //     if ($_GET['filter'] != "") {
-    //         $query .= "WHERE `category`=\"" . $_GET['filter'] . "\"";
-    //         $first = false;
-    //     }
+    public static function filter()
+    {
+        $items = [];
+        $db = new DB();
+        $query = "SELECT * FROM `items` JOIN `categories` on `categories`.`id`= `items`.`category_id`";
+        $first = true;
+        if ($_GET['category'] != "") {
+            $query .= "WHERE `category_id`=\"" . $_GET['category'] . "\"";
+            $first = false;
+        }
 
-    //     if ($_GET['priceFrom'] != "") {
-    //         $query .= (($first) ? "WHERE" : "AND") . " `price` >= " . $_GET['priceFrom'] . " ";
-    //         $first = false;
-    //     }
+        if ($_GET['priceFrom'] != "") {
+            $query .= (($first) ? "WHERE" : "AND") . " `price` >= " . $_GET['priceFrom'] . " ";
+            $first = false;
+        }
 
-    //     if ($_GET['priceTo'] != "") {
-    //         $query .= (($first) ? "WHERE" : "AND") . " `price` <= " . $_GET['priceTo'] . " ";
-    //         $first = false;
-    //     }
+        if ($_GET['priceTo'] != "") {
+            $query .= (($first) ? "WHERE" : "AND") . " `price` <= " . $_GET['priceTo'] . " ";
+            $first = false;
+        }
 
-    //     switch ($_GET['sort']) {
-    //         case '1':
-    //             $query .= "ORDER BY `price`";
-    //             break;
+        switch ($_GET['sort']) {
+            case '1':
+                $query .= "ORDER BY `price`";
+                break;
 
-    //         case '2':
-    //             $query .= "ORDER BY `price` DESC";
-    //             break;
+            case '2':
+                $query .= "ORDER BY `price` DESC";
+                break;
 
-    //         case '3':
-    //             $query .= "ORDER BY `name`";
-    //             break;
+            case '3':
+                $query .= "ORDER BY `name`";
+                break;
 
-    //         case '4':
-    //             $query .= "ORDER BY `name` DESC";
-    //             break;
-    //     }
+            case '4':
+                $query .= "ORDER BY `name` DESC";
+                break;
+        }
 
+        // echo $query;
+        // die;
+        $result = $db->conn->query($query);
 
-    //     // echo $query;
-    //     // die;
-    //     $result = $db->conn->query($query);
-
-    //     while ($row = $result->fetch_assoc()) {
-    //         $items[] = new Item($row['id'], $row['name'], $row['category'], $row['price'], $row['about']);
-    //     }
-    //     $db->conn->close();
-    //     return $items;
-    // }
+        while ($row = $result->fetch_assoc()) {
+            $items[] = new Item($row['id'], $row['name'], $row['price'], $row['about'], $row['category']);
+        }
+        $db->conn->close();
+        return $items;
+    }
 
     public static function search()
     {

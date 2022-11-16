@@ -30,6 +30,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
+    if (isset($_POST['saveCat'])) {
+        CategoryContoller::store();
+    }
+
+    if (isset($_POST['editCat'])) {
+        $item = CategoryContoller::show();
+        $items = CategoryContoller::index();
+        $edit = true;
+    }
+
+    if (isset($_POST['updateCat'])) {
+        CategoryContoller::update();
+        header("Location: ./catshow.php");
+        die;
+    }
+
+    if (isset($_POST['destroyCat'])) {
+        CategoryContoller::destroy();
+        header("Location: ./catshow.php");
+        die;
+    }
+
     $categories = CategoryContoller::index();
 
 }
@@ -38,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['filter'])) {
         $items = ItemContoller::filter();
-        // print_r($_GET);
     } else if (isset($_GET['search'])) {
         $items = ItemContoller::search();
     } else if (isset($_GET['showCat'])) {
@@ -48,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
 }
+
+$categories = CategoryContoller::index();
 
 // $categories = CategoryContoller::index();
 

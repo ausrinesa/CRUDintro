@@ -2,43 +2,33 @@
     <form method="post">
         <div class="mb-3">
             <label for="form" class="form-label">Item name</label>
-            <input type="text" name='name' class="form-control" id="form" style="text-transform:uppercase"
-                value=<?=($edit) ? $item->name : " " ?>
-            >
+            <input type="text" name='name' class="form-control" oninput="this.value = this.value.toUpperCase()"
+                id="form" value=<?=($edit) ? $item->name : " " ?>>
         </div>
-        <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <!-- <select class="form-select" aria-label="Default select example" name="category" value=<?=($edit) ? 
-    $item->category : " " ?>>>
-                <option value="Kušetės"> Kušetės </option>
-                <option value="Atviros lentynos"> Atviros lentynos </option>
-                <option value="Kėdės/Darbo kėdės"> Kėdės/Darbo kėdės </option>
-                <option value="Knygų lentynos"> Knygų lentynos </option>
-                <option value="Sofos"> Sofos </option>
-                <option value="Darbo stalai"> Darbo stalai </option>
-                <option value="Foteliai"> Foteliai </option>
 
-            </select> -->
-
-            <select class="form-select form-control filter" name="filter" aria-label="Default select example"
-                id="category">
-                <option value="" selected> category </option>
-                <?php foreach ($items as $key => $item) { ?>
-                <option>
-                    <?php $item->category ?>
-                </option>
-                <?php } ?>
-            </select>
-        </div>
         <div class="mb-3">
             <label for="price" class="form-label">Price</label>
-            <input type="number" step="0.01" name='price' class="form-control" id="price" value=<?=($edit) ? 
-                    $item->price : " " ?>>
+            <input type="number" step="0.01" name='price' class="form-control" id="price" value=<?=($edit) ?
+                $item->price : " " ?>>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
             <textarea name='about' class="form-control" id="description"> <?=($edit) ? $item->about :
-                    " " ?> </textarea>
+    " " ?> </textarea>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+
+            <select class="form-select form-control filter" name="categoryId" aria-label="Default select example"
+                id="category">
+                <option value="<?=($edit) ? $item->categoryId :
+    " " ?>" selected> category </option>
+                <?php foreach ($categories as $key => $category) { ?>
+                <option value="<?= $category->id ?>">
+                    <?= $category->category ?>
+                </option>
+                <?php } ?>
+            </select>
         </div>
         <?php if ($edit) { ?>
         <input type="hidden" name="id" value="<?= $item->id ?>">

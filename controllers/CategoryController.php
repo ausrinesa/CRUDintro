@@ -23,6 +23,7 @@ class CategoryContoller
 
     public static function update()
     {
+        print_r($_POST);
         $category = new Category();
         $category->id = $_POST['id'];
         $category->category = $_POST['category'];
@@ -31,19 +32,20 @@ class CategoryContoller
 
     public static function destroy()
     {
-        Item::destroy($_POST['id']);
+        Category::destroy($_POST['id']);
     }
 
-// public static function getCategory()
-// {
-//     return Item::getCategory();
-// }
+    public static function getCategory()
+    {
+        return Category::getCategory();
+    }
 
-// public static function filter()
-// {
-//     return Item::filter();
+    public static function filter()
+    {
+        return Category::filter();
 
-// }
+    }
+
 
 // public static function search()
 // {

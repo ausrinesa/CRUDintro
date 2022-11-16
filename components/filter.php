@@ -3,12 +3,12 @@
         <form class="row g-3" method="GET">
             <div class="col-auto">
 
-                <select class="form-select form-control filter" name="filter" aria-label="Default select example"
+                <select class="form-select form-control filter" name="category" aria-label="Default select example"
                     id="category">
                     <option value="" selected> category </option>
                     <?php foreach ($categories as $key => $category) { ?>
-                    <option>
-                        <?= $category ?>
+                    <option value="<?= $category->id ?>">
+                        <?= $category->category ?>
                     </option>
                     <?php } ?>
                 </select>
@@ -35,7 +35,7 @@
 
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary mb-3" id="filterBtn">Filter</button>
+                <button type="submit" name="filter" class="btn btn-primary mb-3" id="filterBtn">Filter</button>
             </div>
     </div>
 </div>
