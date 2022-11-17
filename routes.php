@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (isset($_POST['editCat'])) {
-        $item = CategoryContoller::show();
-        $items = CategoryContoller::index();
+        $category = CategoryContoller::show();
+        $categories = CategoryContoller::index();
         $edit = true;
     }
 
